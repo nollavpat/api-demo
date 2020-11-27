@@ -25,8 +25,9 @@ ganache-cli
   3. Deploy the compiled contract and copy the address. <b>Update the address found on [index.js](index.js#11)</b>
   ![Screenshot](screenshots/deploy-contract-3.png)
   ![Screenshot](screenshots/deploy-contract-4.png)
-- Run your backend
+- Run your backend on a different terminal window
 ```bash
+npm install
 npm start
 ```
 - Open your frontend at http://localhost:3000
