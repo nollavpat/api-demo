@@ -2,65 +2,115 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const Web3 = require('web3');
 
-const Storage = require('./contracts/Storage.json');
+const {
+	WEB3_USER,
+	WEB3_PASSWORD,
+	WEB3_PROVIDER,
+} = process.env;
 
-// the port where our api will be served
-const PORT = 3000;
+// Connection to chain
+const web3 = new Web3(new Web3.providers.HttpProvider(
+  `https://${WEB3_USER}:${WEB3_PASSWORD}@${WEB3_PROVIDER}`,
+));
 
-// change this to the deployed address created by remix
-const ADDRESS = '0x123405EC1a0f41870f1dbaBc9dfcCd00787C2379';
+web3.eth.net.isListening()
+  .then(function() {
+    const app = express();
 
+    // parse application/json
+    app.use(bodyParser.json());
 
-const app = express();
-const web3 = new Web3("ws://localhost:8545"); // gnache default port
-const storageContract = new web3.eth.Contract(
-  Storage.abi,
-  ADDRESS,
-);
+    app.get('/api/wallet/totalSupply', async function (req, res) {
+      try {
+        // insert code here
 
-// parse application/json
-app.use(bodyParser.json());
+        res.status(200).json({
+          message: 'Successfully retrieved total supply.',
+          totalSupply: 200,
+        });
+      } catch (error) {
+        console.error(error);
 
-// serve static files (this will serve our frontend web page)
-app.use(express.static('public'));
-
-app.get('/api/value', async function (req, res) {
-  try {
-    const value = await storageContract.methods.retrieve().call();
-
-    res.status(200).json({
-      message: 'Successfully fetched the value.',
-      value: value,
+        res.status(500).json({
+          message: 'Failed to retrieve total supply.'
+        });
+      }
     });
-  } catch (error) {
-    console.error(error);
 
-    res.status(500).json({
-      message: 'Failed to fetch the value.'
+    app.get('/api/wallet/balances/:address', async function (req, res) {
+      try {
+        // insert code here
+
+        res.status(200).json({
+          message: 'Successfully retrieved balance.',
+          balance: 10,
+        });
+      } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+          message: 'Failed to retrieve balance.'
+        });
+      }
     });
-  }
-});
 
-app.post('/api/value', async function (req, res) {
-  try {
-    const {myAddress, value} = req.body;
+    app.get('/api/wallet/allowances/:address', async function (req, res) {
+      try {
+        // insert code here
 
-    await storageContract.methods
-        .store(Number(value)) // cast to uint256 min:0 max: 2^256-1
-        .send({from: myAddress});
+        res.status(200).json({
+          message: 'Successfully retrieved allowance.',
+          balance: 10,
+        });
+      } catch (error) {
+        console.error(error);
 
-    res.status(200).json({
-      message: 'Successfully stored the value.',
+        res.status(500).json({
+          message: 'Failed to retrieve allowance.'
+        });
+      }
     });
-  } catch (error) {
-    console.error(error);
 
-    res.status(500).json({
-      message: 'Failed to update the value.'
+    app.post('/api/wallet/transfer', async function (req, res) {
+      try {
+        // insert code here
+
+        res.status(200).json({
+          message: 'Successfully transferred funds.',
+        });
+      } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+          message: 'Failed to transfer funds.'
+        });
+      }
     });
-  }
-});
 
-app.listen(PORT, () => {
-  console.log('Example app listening at http://localhost:' + PORT);
-});
+    app.post('/api/wallet/approve', async function (req, res) {
+      try {
+        // insert code here
+
+        res.status(200).json({
+          message: 'Successfully approve funds.',
+        });
+      } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+          message: 'Failed to approve funds.'
+        });
+      }
+    });
+
+    const PORT = 3000; // the port where our api will be served
+
+    app.listen(PORT, () => {
+      console.log('Example app listening at http://localhost:' + PORT);
+    });
+  })
+  .catch(function() {
+    console.log('Connection to chain not established!');
+
+    process.exit(1);
+  });

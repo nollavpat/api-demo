@@ -1,0 +1,247 @@
+openapi: 3.0.0
+info:
+  description: |
+    This is a demo for connection to ERC20 and bid contracts
+  version: "1.0.0"
+  title: ERC20 and Bid Demo
+  contact:
+    email: jairus@ubx.ph
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+  - name: wallet
+    description: Everything about your wallet
+  - name: auction
+    description: Everything about auction
+paths:
+  /wallet/totalSupply:
+    get:
+      tags:
+        - wallet
+      summary: Get total circulating supply
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalSupply:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Successfully retrieved total supply.
+  /wallet/balances/{address}:
+    get:
+      tags:
+        - wallet
+      summary: Get balance of address
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: integer
+                    example: 10
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Successfully retrieved balance.
+  /wallet/allowances/{address}:
+    get:
+      tags:
+        - wallet
+      summary: Get allowance of owner for a given spender
+      parameters:
+        - name: spender
+          in: query
+          description: The spender's address
+          required: true
+          schema:
+            type: string
+            example: "0x247970ea6031894B5Da5B32c6E7BdDca223f6730"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  allowance:
+                    type: integer
+                    example: 20
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Successfully retrieved allowance.
+  /wallet/transfer:
+    post:
+      tags:
+        - wallet
+      summary: Move funds from an account to another called by the owner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - recipient
+                - amount
+              properties:
+                recipient:
+                  type: string
+                  description: Recipient's address
+                  example: "0x123970ea6031894B5Da5B32c6E7BdDca223f6730"
+                spender:
+                  type: string
+                  description: Spender's address
+                  example: "0x236970ea6031894B5Da5B32c6E7BdDca223f6730"
+                amount:
+                  type: integer
+                  description: The amount of funds to transfer
+                  example: 100
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Successfully transferred funds.
+        '500':
+          description: failure operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Failed to transfer funds.
+  /wallet/approve:
+    post:
+      tags:
+        - wallet
+      summary: Adjust the allowance of the spender
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - spender
+                - amount
+              properties:
+                spender:
+                  type: string
+                  description: Spender's address
+                  example: "0x236970ea6031894B5Da5B32c6E7BdDca223f6730"
+                amount:
+                  type: integer
+                  description: The amount of funds to allow
+                  example: 100
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Successfully approve funds.
+        '500':
+          description: failure operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Failed to approve funds.
+  /auction/bid:
+    post:
+      tags:
+        - auction
+      summary: Submit a bid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+              properties:
+                amount:
+                  type: integer
+                  description: The amount to bid
+                  example: 100
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Successfully submitted a bid.
+        '500':
+          description: failure operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Failed to submit a bid.
+  /auction/withdraw:
+    post:
+      tags:
+        - auction
+      summary: Transfer funds to winner
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Successfully transfer funds to winner.
+        '500':
+          description: failure operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Result of operation
+                    example: Failed to transfer funds to winner.

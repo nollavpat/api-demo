@@ -4,14 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "bundle:docs": "redoc-cli bundle ./docs/api.yaml -o ./doc/api.html"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ethereumjs-tx": "^2.1.2",
     "express": "^4.17.1",
     "web3": "^1.3.0"
+  },
+  "devDependencies": {
+    "redoc-cli": "^0.10.2"
   }
 }
