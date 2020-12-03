@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const Web3 = require('web3');
 const Tx = require('ethereumjs-tx');
+const cors = require('cors')
 
 const erc20 = require('./contracts/ERC20.json');
 
@@ -30,6 +31,8 @@ web3.eth.net.isListening()
         ERC20_ADDRESS,
     );
     const app = express();
+
+    app.use(cors());
 
     // parse application/json
     app.use(bodyParser.json()); // if you want to read more what this, https://stackoverflow.com/a/41521743
