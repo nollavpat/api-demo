@@ -1,4 +1,6 @@
 openapi: 3.0.0
+servers:
+  - url: http://localhost:3000
 info:
   description: |
     This is a demo for connection to ERC20 and bid contracts
@@ -59,11 +61,11 @@ paths:
     get:
       tags:
         - wallet
-      summary: Get allowance of owner for a given spender
+      summary: Get allowance of owner for a given sender
       parameters:
-        - name: spender
+        - name: sender
           in: query
-          description: The spender's address
+          description: The sender's address
           required: true
           schema:
             type: string
@@ -101,10 +103,20 @@ paths:
                   type: string
                   description: Recipient's address
                   example: "0x123970ea6031894B5Da5B32c6E7BdDca223f6730"
-                spender:
-                  type: string
-                  description: Spender's address
-                  example: "0x236970ea6031894B5Da5B32c6E7BdDca223f6730"
+                sender:
+                  type: object
+                  required:
+                    - address
+                    - privateKey
+                  properties:
+                    address:
+                      type: string
+                      description: sender's address and private key
+                      example: "0x236970ea6031894B5Da5B32c6E7BdDca223f6730"
+                    privateKey:
+                      type: string
+                      description: sender's private key
+                      example: "0xDa5B32369a223f673070ea6B52c6E7BdDc031894"
                 amount:
                   type: integer
                   description: The amount of funds to transfer
@@ -136,19 +148,19 @@ paths:
     post:
       tags:
         - wallet
-      summary: Adjust the allowance of the spender
+      summary: Adjust the allowance of the sender
       requestBody:
         content:
           application/json:
             schema:
               type: object
               required:
-                - spender
+                - sender
                 - amount
               properties:
-                spender:
+                sender:
                   type: string
-                  description: Spender's address
+                  description: sender's address
                   example: "0x236970ea6031894B5Da5B32c6E7BdDca223f6730"
                 amount:
                   type: integer
