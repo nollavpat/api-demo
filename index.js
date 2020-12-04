@@ -183,7 +183,7 @@ web3.eth.net.isListening()
       }
     });
 
-    const PORT = 3000; // the port where our api will be served
+    const PORT = 8080; // the port where our api will be served
 
     app.listen(PORT, () => {
       console.log('Example app listening at http://localhost:' + PORT);
