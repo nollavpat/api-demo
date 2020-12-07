@@ -101,6 +101,14 @@ app.post('/api/cars', function (req, res) {
 app.patch('/api/cars/:id', function (req, res) {
   try {
     // sorry during the demo I was asserting using "===", I should have used isNaN()
+
+    /*
+    > Number('a') === NaN // false
+    > isNaN('a') // true
+
+    NaN = Not a Number
+    */
+
     // this should work na! ^^
     if (isNaN(req.params.id)) {
       res.status(400).json({
